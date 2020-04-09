@@ -1,0 +1,25 @@
+/*
+   server-side-angular-way.component.css
+*/
+
+.no-data-available {
+    text-align: center;
+  }
+  
+  /*
+     src/styles.css (i.e. your global style)
+  */
+  .dataTables_empty {
+    display: none;
+  }
+
+  .dark-modal .modal-content {
+   background-color: #292b2c;
+   color: white;
+ }
+ .dark-modal .close {
+   color: white;
+ }
+ .light-blue-backdrop {
+   background-color: #5cb3fd;
+ }

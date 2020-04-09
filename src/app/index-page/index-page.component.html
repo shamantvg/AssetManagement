@@ -1,0 +1,181 @@
+<!-- <form (ngSubmit)="onSubmit(reportForm); reportForm.reset()" #reportForm="ngForm"> -->
+  <form #reportForm="ngForm">
+  <div class="wrapper">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+      <ul class="list-unstyled components">
+        <li>
+          <a href="javascript:;" (click)="openModal(template)">Add Asset</a>
+        </li>
+        <li>
+          <a href="javascript:;">Edit Asset</a>
+        </li>
+        <li>
+          <a href="javascript:;">Remove Asset</a>
+        </li>
+        <li>
+          <a href="javascript:;">Assign Asset</a>
+        </li>
+        <!-- <li *ngIf='ReportLink !== null'> -->
+        <li>
+          <a (click)="exportAsXLSX()" href="javascript:;">Export Assets</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Page Content  -->
+    <div id="content">
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+
+          <button type="button" id="sidebarCollapse" class="btn btn-info">
+            <i class="fas fa-align-left"></i>
+            <span>Toggle Sidebar</span>
+          </button>
+          <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <i class="fas fa-align-justify"></i>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <h1>Asset Management </h1>
+            <ul class="nav navbar-nav ml-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="javascript:;" (click)="reload_home()">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="javascript:;" (click)="load_contact()">Contact us</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="javascript:;" (click)="load_faq()">FAQ</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="javascript:;" (click)="load_about()">About us</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="javascript:;" (click)="logout()">Log out</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <div class="content-area">
+        <div class="container">
+          <!-- <table datatable [dtOptions]="dtOptions" class="row-border hover">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>First name</th>
+                <th>Last name</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="persons?.length != 0">
+                <tr *ngFor="let person of persons">
+                    <td>{{ person.id }}</td>
+                    <td>{{ person.firstName }}</td>
+                    <td>{{ person.lastName }}</td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="persons?.length == 0">
+              <tr>
+                <td colspan="3" class="no-data-available">No data!</td>
+              </tr>
+            <tbody>
+          </table> -->
+          <table datatable class="row-border hover">
+            <thead>
+              <tr>
+                <th>SL No.</th>
+                <th>Asset Type</th>
+                <th>Serial Number</th>
+                <th>Manufacter</th>
+                <th>Assigned</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Laptop</td>
+                <td>TMD001</td>
+                <td>HP</td>
+                <td>Ravi</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Desktop</td>
+                <td>TMD002</td>
+                <td>DELL</td>
+                <td>Vinod</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Mouse</td>
+                <td>TMD003</td>
+                <td>HP</td>
+                <td>Rohit</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Keyboard</td>
+                <td>TMD004</td>
+                <td>HP</td>
+                <td>Shankar</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>Laptop</td>
+                <td>TMD005</td>
+                <td>Lenovo</td>
+                <td>Rakesh</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+ 
+<ng-template #template>
+  <form form (ngSubmit)="AddAsset(addAssetForm); addAssetForm.reset()" #addAssetForm="ngForm"
+    class="col-xs-12 col-sm-12  col-md-12 col-lg-12" id="addAsset-form-id">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add New Asset</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    
+    <div class="form-group">
+      <label for="Asset_Type">Asset Type:</label>
+        <select class="form-control">
+          <option [(value)]="type.Tname" *ngFor="let type of assetType" name="Asset_Type" id="Asset_Type">{{type.Tname}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+      <label for="Serial_Number">Serial Number:</label>
+      <input ngModel type="text" class="form-control" id="Serial_Number" placeholder="Enter Serial_Number" name="Serial_Number"
+        #Serial_Number="ngModel" required>
+      <div class="alert alert-danger" *ngIf="Serial_Number.touched && !Serial_Number.valid">
+        Please enter Serial Number.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="Manufacter">Manufacter:</label>
+      <input ngModel type="text" class="form-control" id="Manufacter" placeholder="Enter Manufacter" name="Manufacter"
+        #Manufacter="ngModel" required>
+      <div class="alert alert-danger" *ngIf="Manufacter.touched && !Manufacter.valid">
+        Please enter Manufacter.
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <input class="btn btn-primary" type="submit" value="Submit" [disabled]="!addAssetForm.form.valid">
+    <p class="alert alert-danger top-space" *ngIf="error !== null">{{error}}</p>
+  </div>
+</form>
+</ng-template>
