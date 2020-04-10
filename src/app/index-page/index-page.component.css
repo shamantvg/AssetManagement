@@ -23,3 +23,8 @@
  .light-blue-backdrop {
    background-color: #5cb3fd;
  }
+
+ .question-modal-body {
+  max-height: 350px; 
+  overflow: auto;
+}

@@ -8,13 +8,13 @@
           <a href="javascript:;" (click)="openModal(template)">Add Asset</a>
         </li>
         <li>
-          <a href="javascript:;">Edit Asset</a>
+          <a href="javascript:;" (click)="openModal(template_edit)">Edit Asset</a>
         </li>
         <li>
-          <a href="javascript:;">Remove Asset</a>
+          <a href="javascript:;" (click)="openModal(template_remove)">Remove Asset</a>
         </li>
         <li>
-          <a href="javascript:;">Assign Asset</a>
+          <a href="javascript:;" (click)="openModal(template_assign)">Assign Asset</a>
         </li>
         <!-- <li *ngIf='ReportLink !== null'> -->
         <li>
@@ -148,33 +148,269 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="modal-body">
-    
+  <div class="modal-body question-modal-body">
+
     <div class="form-group">
-      <label for="Asset_Type">Asset Type:</label>
-        <select class="form-control">
-          <option [(value)]="type.Tname" *ngFor="let type of assetType" name="Asset_Type" id="Asset_Type">{{type.Tname}}</option>
-        </select>
-    </div>
-    <div class="form-group">
-      <label for="Serial_Number">Serial Number:</label>
-      <input ngModel type="text" class="form-control" id="Serial_Number" placeholder="Enter Serial_Number" name="Serial_Number"
-        #Serial_Number="ngModel" required>
-      <div class="alert alert-danger" *ngIf="Serial_Number.touched && !Serial_Number.valid">
+      <label for="system_serial_number">Serial Number:</label>
+      <input ngModel type="text" class="form-control" id="system_serial_number" placeholder="Enter Serial Number" name="system_serial_number"
+        #system_serial_number="ngModel" required>
+      <div class="alert alert-danger" *ngIf="system_serial_number.touched && !system_serial_number.valid">
         Please enter Serial Number.
       </div>
     </div>
+    
     <div class="form-group">
-      <label for="Manufacter">Manufacter:</label>
-      <input ngModel type="text" class="form-control" id="Manufacter" placeholder="Enter Manufacter" name="Manufacter"
-        #Manufacter="ngModel" required>
-      <div class="alert alert-danger" *ngIf="Manufacter.touched && !Manufacter.valid">
-        Please enter Manufacter.
+      <label for="asset_type">Asset Type:</label>
+        <select class="form-control">
+          <option [(value)]="type.Tname" *ngFor="let type of assetType" name="asset_type" id="asset_type">{{type.Tname}}</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="OEM">OEM:</label>
+      <input ngModel type="text" class="form-control" id="OEM" placeholder="Enter OEM" name="OEM"
+        #OEM="ngModel" required>
+      <div class="alert alert-danger" *ngIf="OEM.touched && !OEM.valid">
+        Please enter OEM.
       </div>
     </div>
+
+    <div class="form-group">
+      <label for="model">Model:</label>
+      <input ngModel type="text" class="form-control" id="model" placeholder="Enter model" name="model"
+        #model="ngModel" required>
+      <div class="alert alert-danger" *ngIf="model.touched && !model.valid">
+        Please enter model.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="procure_date">Procure Date:</label>
+      <ejs-datetimepicker  id='procure_date' name="procure_date" placeholder='Select a date'>
+      </ejs-datetimepicker>
+    </div>
+
+    <div class="form-group">
+      <label for="warranty_startDate">Warranty Start Date:</label>
+      <ejs-datetimepicker  id='warranty_startDate' name="warranty_startDate" placeholder='Select a date'>
+      </ejs-datetimepicker>
+    </div>
+
+    <div class="form-group">
+      <label for="warrenty_endDate">Warrenty End Date:</label>
+      <ejs-datetimepicker  id='warrenty_endDate' name="warrenty_endDate" placeholder='Select a date'>
+      </ejs-datetimepicker>
+    </div>
+
+    <div class="form-group">
+      <label for="AMC_startDate">AMC Start Date:</label>
+      <ejs-datetimepicker  id='AMC_startDate' name="AMC_startDate" placeholder='Select a date'>
+      </ejs-datetimepicker>
+    </div>
+
+    <div class="form-group">
+      <label for="AMC_endDate">AMC End Date:</label>
+      <ejs-datetimepicker  id='AMC_endDate' name="AMC_endDate" placeholder='Select a date'>
+      </ejs-datetimepicker>
+    </div>
+
+    <div class="form-group">
+      <label for="os_image">OS Image:</label>
+      <input ngModel type="text" class="form-control" id="os_image" placeholder="Enter os_image" name="os_image"
+        #os_image="ngModel" required>
+      <div class="alert alert-danger" *ngIf="os_image.touched && !os_image.valid">
+        Please enter os_image.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="is_AMAT_compliant">AMAT_compliant:</label>
+        <select class="form-control" id="is_AMAT_compliant" name="is_AMAT_compliant">
+          <option [(value)]="AMATCompliantValues.desc" *ngFor="let AMATCompliantValues of AMATCompliant">{{AMATCompliantValues.desc}}</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+      <label for="GIS_GDC">GIS/GDC:</label>
+        <select class="form-control" id="GIS_GDC" name="GIS_GDC">
+          <option [(value)]="valuesbyname.name" *ngFor="let valuesbyname of GIS_GDC_values">{{valuesbyname.name}}</option>
+        </select>
+    </div>
+    
   </div>
   <div class="modal-footer">
     <input class="btn btn-primary" type="submit" value="Submit" [disabled]="!addAssetForm.form.valid">
+    <p class="alert alert-danger top-space" *ngIf="error !== null">{{error}}</p>
+  </div>
+</form>
+</ng-template>
+
+
+<ng-template #template_edit>
+  <form form (ngSubmit)="EditAsset(editAssetForm); editAssetForm.reset()" #editAssetForm="ngForm"
+    class="col-xs-12 col-sm-12  col-md-12 col-lg-12" id="editAsset-form-id">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modify Asset Details</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body question-modal-body">
+
+    <div class="form-group">
+      <label for="system_serial_number_edit">Serial Number:</label>
+      <input ngModel type="text" class="form-control" id="_edit" placeholder="Enter Serial Number" name="system_serial_number_edit"
+        #system_serial_number_edit="ngModel" readonly>
+      <!-- <div class="alert alert-danger" *ngIf="system_serial_number_edit.touched && !system_serial_number_edit.valid">
+        Please enter Serial Number.
+      </div> -->
+    </div>
+    
+    <div class="form-group">
+      <label for="asset_type_edit">Asset Type:</label>
+        <select class="form-control">
+          <option [(value)]="type.Tname" *ngFor="let type of assetType" name="asset_type_edit" id="asset_type_edit">{{type.Tname}}</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="OEM_edit">OEM:</label>
+      <input ngModel type="text" class="form-control" id="OEM_edit" placeholder="Enter OEM" name="OEM_edit"
+        #OEM_edit="ngModel" required>
+      <div class="alert alert-danger" *ngIf="OEM_edit.touched && !OEM_edit.valid">
+        Please enter OEM.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="model_edit">Model:</label>
+      <input ngModel type="text" class="form-control" id="model_edit" placeholder="Enter model" name="model_edit"
+        #model_edit="ngModel" required>
+      <div class="alert alert-danger" *ngIf="model_edit.touched && !model_edit.valid">
+        Please enter model.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="procure_date_edit">Procure Date:</label>
+      <ejs-datetimepicker  id='procure_date_edit' name="procure_date_edit" placeholder='Select a date'>
+      </ejs-datetimepicker>
+    </div>
+
+    <div class="form-group">
+      <label for="warranty_startDate_edit">Warranty Start Date:</label>
+      <ejs-datetimepicker  id='warranty_startDate_edit' name="warranty_startDate_edit" placeholder='Select a date'>
+      </ejs-datetimepicker>
+    </div>
+
+    <div class="form-group">
+      <label for="warrenty_endDate_edit">Warrenty End Date:</label>
+      <ejs-datetimepicker  id='warrenty_endDate_edit' name="warrenty_endDate_edit" placeholder='Select a date'>
+      </ejs-datetimepicker>
+    </div>
+
+    <div class="form-group">
+      <label for="AMC_startDate_edit">AMC Start Date:</label>
+      <ejs-datetimepicker  id='AMC_startDate_edit' name="AMC_startDate_edit" placeholder='Select a date'>
+      </ejs-datetimepicker>
+    </div>
+
+    <div class="form-group">
+      <label for="AMC_endDate_edit">AMC End Date:</label>
+      <ejs-datetimepicker  id='AMC_endDate_edit' name="AMC_endDate_edit" placeholder='Select a date'>
+      </ejs-datetimepicker>
+    </div>
+
+    <div class="form-group">
+      <label for="os_image_edit">OS Image:</label>
+      <input ngModel type="text" class="form-control" id="os_image_edit" 
+      placeholder="Enter os_image" name="os_image_edit"
+        #os_image_edit="ngModel" required>
+      <div class="alert alert-danger" *ngIf="os_image_edit.touched && !os_image_edit.valid">
+        Please enter os_image.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="is_AMAT_compliant_edit">AMAT_compliant:</label>
+        <select class="form-control" id="is_AMAT_compliant_edit" name="is_AMAT_compliant_edit">
+          <option [(value)]="AMATCompliantValues.desc" *ngFor="let AMATCompliantValues of AMATCompliant">{{AMATCompliantValues.desc}}</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+      <label for="GIS_GDC_edit">GIS/GDC:</label>
+        <select class="form-control" id="GIS_GDC_edit" name="GIS_GDC_edit">
+          <option [(value)]="valuesbyname.name" *ngFor="let valuesbyname of GIS_GDC_values">{{valuesbyname.name}}</option>
+        </select>
+    </div>
+    
+  </div>
+  <div class="modal-footer">
+    <input class="btn btn-primary" type="submit" value="Submit" [disabled]="!editAssetForm.form.valid">
+    <p class="alert alert-danger top-space" *ngIf="error !== null">{{error}}</p>
+  </div>
+</form>
+</ng-template>
+
+
+<ng-template #template_remove>
+  <form form (ngSubmit)="RemoveAsset(removeAssetForm); removeAssetForm.reset()" #removeAssetForm="ngForm"
+    class="col-xs-12 col-sm-12  col-md-12 col-lg-12" id="removeAsset-form-id">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Remove Asset Details</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body question-modal-body">
+
+    <div class="form-group">
+      <h2 id="remove_msg" name="remove_msg" >Are you sure ?</h2><br/>You want to remove the asset !!!
+    </div>
+  </div>
+    
+  <div class="modal-footer">
+    <input class="btn btn-primary" type="submit" value="Yes">
+    <button type="button" class="btn btn-primary" (click)="modalRef.hide()">No</button>
+    <p class="alert alert-danger top-space" *ngIf="error !== null">{{error}}</p>
+  </div>
+</form>
+</ng-template>
+
+<ng-template #template_assign>
+  <form form (ngSubmit)="AssignAsset(assignAssetForm); assignAssetForm.reset()" #assignAssetForm="ngForm"
+    class="col-xs-12 col-sm-12  col-md-12 col-lg-12" id="assignAssetForm-form-id">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Assign/Reassign Asset : </h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body question-modal-body">
+
+    <div class="form-group">
+      <label for="system_serial_number_assign">Serial Number:</label>
+      <input ngModel type="text" class="form-control" id="_edit" placeholder="Enter Serial Number" name="system_serial_number_assign"
+        #system_serial_number_assign="ngModel" readonly>
+      <!-- <div class="alert alert-danger" *ngIf="system_serial_number_edit.touched && !system_serial_number_edit.valid">
+        Please enter Serial Number.
+      </div> -->
+    </div>
+
+    <div class="form-group">
+      <label for="employee_id">Please select employee:</label>
+        <select class="form-control" id="employee_id" name="employee_id">
+          <option [(value)]="empValues.id" *ngFor="let empValues of employeeList">{{empValues.name}}</option>
+        </select>
+    </div>
+    
+  </div>
+  <div class="modal-footer">
+    <input class="btn btn-primary" type="submit" value="submit">
     <p class="alert alert-danger top-space" *ngIf="error !== null">{{error}}</p>
   </div>
 </form>

@@ -36,8 +36,13 @@ export class IndexPageComponent implements OnInit {
 
   modalRef: BsModalRef;
   error = null;
+  AssetSel =null;
 
-  dtOptions: DataTables.Settings = {};
+  dtOptions: DataTables.Settings = {
+    
+  };
+
+  
   persons: Person[];
   title = '';
 
@@ -47,6 +52,9 @@ export class IndexPageComponent implements OnInit {
     this.modalRef = this.modalService.show(template);
   }
 
+  someClickHandler(info: any): void {
+    this.AssetSel = info.asset_id;
+  }
   
 
   ngOnInit(): void {
@@ -88,12 +96,37 @@ export class IndexPageComponent implements OnInit {
             });
           });
       },
-      columns: [{ data: 'id' }, { data: 'firstName' }, { data: 'lastName' }]
+      columns: [{ data: 'id' }, { data: 'firstName' }, { data: 'lastName' }],
+      rowCallback: (row: Node, data: any[] | Object, index: number) => {
+        const self = this;
+        // Unbind first in order to avoid any duplicate handler
+        // (see https://github.com/l-lin/angular-datatables/issues/87)
+        $('td', row).unbind('click');
+        $('td', row).bind('click', () => {
+          self.someClickHandler(data);
+        });
+        //$(row).on('click', function (e) {
+         // $(row).addClass('highlight');
+       //});
+        return row;
+      }
     };
   }
 
   AddAsset(form: NgForm){
     
+  }
+
+  EditAsset(form: NgForm){
+
+  }
+
+  RemoveAsset(form: NgForm){
+
+  }
+
+  AssignAsset(form: NgForm){
+
   }
 
 
@@ -163,6 +196,44 @@ export class IndexPageComponent implements OnInit {
     Tname: 'Mouse',
    }
   ];
+
+  AMATCompliant = [{
+    desc: 'Yes',
+   },
+   {
+    desc: 'No',
+   }
+  ];
+
+  GIS_GDC_values = [{
+    name: 'GIS',
+   },
+   {
+    name: 'GDC',
+   }
+  ];
+
+  employeeList =[{
+    id:1,
+    name : "Shamant Gudigenavar"
+  },
+  {
+    id:2,
+    name : "Rohit t"
+  },
+  {
+    id:3,
+    name : "Mahesh P"
+  },
+  {
+    id:4,
+    name : "Sachin P"
+  },
+  {
+    id:5,
+    name : "Shridhar K"
+  }
+]
 
 }
 
