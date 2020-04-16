@@ -1,5 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-balham.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
+table{
+    width: 100%;
+}
 
 #admin_portal{
     float: right;
@@ -247,7 +253,7 @@ select.custom-select {
     padding: 0;
 }
 .content-area .col-sm-6{
-    padding-bottom: 31px;
+    /* padding-bottom: 31px; */
     max-width: 48%;
     display: inline-block;
     vertical-align: text-top;
@@ -379,3 +385,5 @@ label{margin-left: 20px;}
         margin-top: 20px;
     }
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

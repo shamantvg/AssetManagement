@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import * as $ from "jquery";
-import { NgModule } from '@angular/core';
+import { NgModule,CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { DateTimePickerModule } from '@syncfusion/ej2-angular-calendars';
@@ -16,6 +16,9 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { DataTablesModule } from 'angular-datatables';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { AgGridModule } from 'ag-grid-angular';
+
+import { AngularMaterialModule } from './angular-material.module';
 
 @NgModule({
   declarations: [
@@ -28,6 +31,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     ResetPasswordComponent
   ],
   imports: [
+    AngularMaterialModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -35,9 +39,11 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     DateTimePickerModule,
     DataTablesModule,
     BrowserAnimationsModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    AgGridModule.withComponents([])
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

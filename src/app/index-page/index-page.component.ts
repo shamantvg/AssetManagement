@@ -1,26 +1,19 @@
-import { Component, OnInit, TemplateRef  } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import * as $ from "jquery";
 import { HttpClient } from '@angular/common/http';
 import { FieldsService } from '../fields.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ExcelService } from '../excel.service';
-import { DataTablesModule } from 'angular-datatables';
+//import { DataTablesModule } from 'angular-datatables';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { AngularMaterialModule } from '../angular-material.module';
 
 
-class Person {
-  id: number;
-  firstName: string;
-  lastName: string;
-}
 
-class DataTablesResponse {
-  data: any[];
-  draw: number;
-  recordsFiltered: number;
-  recordsTotal: number;
-}
 
 @Component({
   selector: 'app-index-page',
@@ -29,43 +22,114 @@ class DataTablesResponse {
 })
 export class IndexPageComponent implements OnInit {
 
+
   constructor(private FieldsList: FieldsService, private router: Router, private excelService: ExcelService
-    , private DataTables: DataTablesModule, private http: HttpClient,private modalService: BsModalService) {
+    , private http: HttpClient, private modalService: BsModalService) {
+
+
 
   }
 
+  displayedColumns: string[] = ['id', 'employee_name', 'employee_salary', 'employee_age', 'profile_image'];
+  dataSource : MatTableDataSource<any>;
+  
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+
+
   modalRef: BsModalRef;
   error = null;
-  AssetSel =null;
+  AssetSel = null;
+  addAssetForm_tag = null;
+  grid_tag = true;
+  editAssetForm_tag = null;
+  assignAssetForm_tag = null;
+  selectedRowIndex: number = -1;
 
-  dtOptions: DataTables.Settings = {
-    
-  };
-
-  
-  persons: Person[];
   title = '';
 
   closeResult: string;
 
   openModal(template: TemplateRef<any>) {
+
+    if((this.selectedRowIndex < 1) || (this.selectedRowIndex === undefined)){
+      alert("please select a asset !!!");
+      return false;
+    }
+
+    this.grid_tag = true;
+    this.editAssetForm_tag = null;
+    this.assignAssetForm_tag = null;
+    this.addAssetForm_tag = null;
     this.modalRef = this.modalService.show(template);
+
   }
 
-  someClickHandler(info: any): void {
-    this.AssetSel = info.asset_id;
+  open_addAssetDiv() {
+    this.grid_tag = null;
+    this.editAssetForm_tag = null;
+    this.assignAssetForm_tag = null;
+    this.addAssetForm_tag = true;
   }
-  
+
+  open_editAssetDiv() {
+
+    if((this.selectedRowIndex < 1) || (this.selectedRowIndex === undefined)){
+      alert("please select a asset !!!");
+      return false;
+    }
+
+    this.grid_tag = null;
+    this.editAssetForm_tag = true;
+    this.assignAssetForm_tag = null;
+    this.addAssetForm_tag = null;
+  }
+
+  open_assignAssetDiv() {
+
+    
+
+    if((this.selectedRowIndex < 1) || (this.selectedRowIndex === undefined)){
+      alert("please select a asset !!!");
+      return false;
+    }
+
+    this.grid_tag = null;
+    this.editAssetForm_tag = null;
+    this.assignAssetForm_tag = true;
+    this.addAssetForm_tag = null;
+  }
 
   ngOnInit(): void {
     this.isLoggedIn();
-    this.GetGrid();
+  }
+
+  ngAfterViewInit() {
+    console.log("ngAfterViewInit");
+    setTimeout(() => this.dataSource.paginator = this.paginator);
+    setTimeout(() => this.dataSource.sort = this.sort);
+  }
+
+  applyFilter(event: Event) {
+    console.log("event");
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  rowClicked(rowval) {
+    this.selectedRowIndex = rowval.id;
+    console.log("rorval--->"+JSON.stringify(rowval));
+  }
+  eleClicked(eleval) {
+    //console.log("element val--->"+JSON.stringify(eleval));
   }
 
   isLoggedIn(): boolean {
     const userDetails = JSON.parse(localStorage.getItem('admiinDetails'));
     if (userDetails) {
-      //this.getFieldsList();
+      this.GetGrid();
       return true;
     } else {
       this.router.navigateByUrl('/login');
@@ -74,58 +138,45 @@ export class IndexPageComponent implements OnInit {
   }
 
   GetGrid(): any {
-    return true;
-    const that = this;
-    this.dtOptions = {
-      pagingType: 'full_numbers',
-      pageLength: 5,
-      serverSide: true,
-      processing: true,
-      ajax: (dataTablesParameters: any, callback) => {
-        that.http
-          .post<DataTablesResponse>(
-            'https://angular-datatables-demo-server.herokuapp.com/',
-            dataTablesParameters, {}
-          ).subscribe(resp => {
-            that.persons = resp.data;
 
-            callback({
-              recordsTotal: resp.recordsTotal,
-              recordsFiltered: resp.recordsFiltered,
-              data: []
-            });
-          });
-      },
-      columns: [{ data: 'id' }, { data: 'firstName' }, { data: 'lastName' }],
-      rowCallback: (row: Node, data: any[] | Object, index: number) => {
-        const self = this;
-        // Unbind first in order to avoid any duplicate handler
-        // (see https://github.com/l-lin/angular-datatables/issues/87)
-        $('td', row).unbind('click');
-        $('td', row).bind('click', () => {
-          self.someClickHandler(data);
-        });
-        //$(row).on('click', function (e) {
-         // $(row).addClass('highlight');
-       //});
-        return row;
-      }
-    };
-  }
+    console.log("ngOnInit");
+    this.FieldsList.getEmps().subscribe((result) => {
+      //console.log("result--->" + JSON.stringify(result));
+      this.dataSource = new MatTableDataSource(result.data);
 
-  AddAsset(form: NgForm){
+      this.grid_tag = true;
+      // this.dataSource.paginator = this.paginator;
+      // this.dataSource.sort = this.sort;
+      
+      
+      //   setTimeout(() => this.dataSource.paginator = this.paginator);
+      // setTimeout(() => this.dataSource.sort = this.sort);
+    });
+
+    //let result = this.FieldsList.getEmps();
+    //console.log("result--->" + JSON.stringify(result));
+    //this.dataSource = new MatTableDataSource(result);
     
-  }
-
-  EditAsset(form: NgForm){
+    
 
   }
 
-  RemoveAsset(form: NgForm){
+
+
+
+  AddAsset(form: NgForm) {
 
   }
 
-  AssignAsset(form: NgForm){
+  EditAsset(form: NgForm) {
+
+  }
+
+  RemoveAsset(form: NgForm) {
+
+  }
+
+  AssignAsset(form: NgForm) {
 
   }
 
@@ -135,7 +186,15 @@ export class IndexPageComponent implements OnInit {
     this.router.navigateByUrl('/login');
   }
   reload_home() {
-    this.router.navigateByUrl('/home-page');
+    //alert("here");
+    this.selectedRowIndex = -1;
+    this.grid_tag = true;
+    this.addAssetForm_tag = null;
+    this.editAssetForm_tag = null;
+    this.assignAssetForm_tag = null;
+    setTimeout(() => this.dataSource.paginator = this.paginator);
+    setTimeout(() => this.dataSource.sort = this.sort);
+    //this.router.navigateByUrl('/home-page');
   }
   load_contact() {
     this.router.navigateByUrl('/contact');
@@ -148,7 +207,9 @@ export class IndexPageComponent implements OnInit {
   }
 
   exportAsXLSX(): void {
+
     this.excelService.exportAsExcelFile(this.exportData, 'Asset-Details');
+    this.reload_home();
   }
 
   exportData: any = [{
@@ -185,56 +246,55 @@ export class IndexPageComponent implements OnInit {
 
   assetType = [{
     Tname: 'Desktop',
-   },
-   {
+  },
+  {
     Tname: 'Laptop',
-   },
-   {
+  },
+  {
     Tname: 'Keyboard',
-   },
-   {
+  },
+  {
     Tname: 'Mouse',
-   }
+  }
   ];
 
   AMATCompliant = [{
     desc: 'Yes',
-   },
-   {
+  },
+  {
     desc: 'No',
-   }
+  }
   ];
 
   GIS_GDC_values = [{
     name: 'GIS',
-   },
-   {
+  },
+  {
     name: 'GDC',
-   }
+  }
   ];
 
-  employeeList =[{
-    id:1,
-    name : "Shamant Gudigenavar"
+  employeeList = [{
+    id: 1,
+    name: "Shamant Gudigenavar"
   },
   {
-    id:2,
-    name : "Rohit t"
+    id: 2,
+    name: "Rohit t"
   },
   {
-    id:3,
-    name : "Mahesh P"
+    id: 3,
+    name: "Mahesh P"
   },
   {
-    id:4,
-    name : "Sachin P"
+    id: 4,
+    name: "Sachin P"
   },
   {
-    id:5,
-    name : "Shridhar K"
+    id: 5,
+    name: "Shridhar K"
   }
-]
+  ]
+
 
 }
-
-

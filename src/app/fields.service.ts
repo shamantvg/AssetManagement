@@ -20,6 +20,10 @@ export class FieldsService {
     return '{"field1":"field1","field2":"fields2"}';
   }
 
+  getEmps(): Observable<any> {
+    return this.http.get<any>('http://dummy.restapiexample.com/api/v1/employees');
+  }
+
   /*loginadmin(admin): Observable<any> {
     return this.http.post('http://localhost:8080/lms/loginadmin', admin);
   }*/
