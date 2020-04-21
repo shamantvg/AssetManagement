@@ -6,7 +6,8 @@
         <ul class="list-unstyled components">
             <li>
                 <!-- <a href="javascript:;" (click)="openModal(template)">Add Asset</a> -->
-                <a [ngClass]="{'active-this': addAssetForm_tag !== null}" href="javascript:;" (click)="open_addAssetDiv()">Add Asset</a>
+                <a [ngClass]="{'active-this': addAssetForm_tag !== null}" href="javascript:;" (click)="open_addAssetDiv()">Add
+          Asset</a>
             </li>
             <li>
                 <a [ngClass]="{'active-this': editAssetForm_tag !== null}" href="javascript:;" (click)="open_editAssetDiv()">Edit Asset</a>
@@ -64,7 +65,7 @@
         <div class="content-area">
             <div class="container">
 
-                <form form (ngSubmit)="AddAsset(addAssetForm); addAssetForm.reset()" #addAssetForm="ngForm" class="col-xs-12 col-sm-12  col-md-12 col-lg-12" id="addAsset-form-id" *ngIf="addAssetForm_tag !== null">
+                <form form (ngSubmit)="AddAsset(addAssetForm);" #addAssetForm="ngForm" class="col-xs-12 col-sm-12  col-md-12 col-lg-12" id="addAsset-form-id" *ngIf="addAssetForm_tag !== null">
                     <div class="modal-header">
                         <h3 class="modal-title pull-left mod-head">
                             Add New Asset
@@ -90,8 +91,8 @@
 
                         <div class="form-group row">
                             <label for="asset_type" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Asset Type:</label>
-                            <select class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6">
-                <option [(value)]="type.Tname" *ngFor="let type of assetType" name="asset_type" id="asset_type">
+                            <select ngModel class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" name="asset_type" id="asset_type">
+                <option [(value)]="type.Tname" *ngFor="let type of assetType">
                   {{type.Tname}}
                 </option>
               </select>
@@ -124,35 +125,35 @@
 
                         <div class="form-group row">
                             <label for="procure_date" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Procure Date:</label>
-                            <ejs-datetimepicker id='procure_date' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="procure_date" placeholder='Select a date'>
+                            <ejs-datetimepicker required ngModel id='procure_date' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="procure_date" placeholder='Select a date'>
                             </ejs-datetimepicker>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
 
                         <div class="form-group row">
                             <label for="warranty_startDate" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Warranty Start Date:</label>
-                            <ejs-datetimepicker class="col-xs-6 col-sm-6  col-md-6 col-lg-6" id='warranty_startDate' name="warranty_startDate" placeholder='Select a date'>
+                            <ejs-datetimepicker required ngModel class="col-xs-6 col-sm-6  col-md-6 col-lg-6" id='warranty_startDate' name="warranty_startDate" placeholder='Select a date'>
                             </ejs-datetimepicker>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
 
                         <div class="form-group row">
                             <label for="warrenty_endDate" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Warrenty End Date:</label>
-                            <ejs-datetimepicker id='warrenty_endDate' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="warrenty_endDate" placeholder='Select a date'>
+                            <ejs-datetimepicker required ngModel id='warrenty_endDate' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="warrenty_endDate" placeholder='Select a date'>
                             </ejs-datetimepicker>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
 
                         <div class="form-group row">
                             <label for="AMC_startDate" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">AMC Start Date:</label>
-                            <ejs-datetimepicker id='AMC_startDate' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="AMC_startDate" placeholder='Select a date'>
+                            <ejs-datetimepicker required ngModel id='AMC_startDate' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="AMC_startDate" placeholder='Select a date'>
                             </ejs-datetimepicker>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
 
                         <div class="form-group row">
                             <label for="AMC_endDate" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">AMC End Date:</label>
-                            <ejs-datetimepicker id='AMC_endDate' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="AMC_endDate" placeholder='Select a date'>
+                            <ejs-datetimepicker required ngModel id='AMC_endDate' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="AMC_endDate" placeholder='Select a date'>
                             </ejs-datetimepicker>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
@@ -171,8 +172,8 @@
 
                         <div class="form-group row">
                             <label for="is_AMAT_compliant" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">AMAT_compliant:</label>
-                            <select class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="is_AMAT_compliant" name="is_AMAT_compliant">
-                <option [(value)]="AMATCompliantValues.desc" *ngFor="let AMATCompliantValues of AMATCompliant">
+                            <select ngModel class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="is_AMAT_compliant" name="is_AMAT_compliant">
+                <option [(value)]="AMATCompliantValues.id" *ngFor="let AMATCompliantValues of AMATCompliant">
                   {{AMATCompliantValues.desc}}</option>
               </select>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
@@ -180,7 +181,7 @@
 
                         <div class="form-group row">
                             <label for="GIS_GDC" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">GIS/GDC:</label>
-                            <select class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="GIS_GDC" name="GIS_GDC">
+                            <select ngModel class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="GIS_GDC" name="GIS_GDC">
                 <option [(value)]="valuesbyname.name" *ngFor="let valuesbyname of GIS_GDC_values">{{valuesbyname.name}}
                 </option>
               </select>
@@ -194,7 +195,7 @@
                     </div>
                 </form>
 
-                <form form (ngSubmit)="EditAsset(editAssetForm); editAssetForm.reset()" #editAssetForm="ngForm" class="col-xs-12 col-sm-12  col-md-12 col-lg-12" id="editAsset-form-id" *ngIf="editAssetForm_tag !== null">
+                <form form (ngSubmit)="EditAsset(editAssetForm);" #editAssetForm="ngForm" class="col-xs-12 col-sm-12  col-md-12 col-lg-12" id="editAsset-form-id" *ngIf="editAssetForm_tag !== null">
                     <div class="modal-header">
                         <h3 class="modal-title pull-left mod-head">Modify Asset Details</h3>
                         <button type="button" class="close pull-right" aria-label="Close" (click)="reload_home()">
@@ -206,7 +207,8 @@
 
                         <div class="form-group row">
                             <label for="system_serial_number_edit" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Serial Number:</label>
-                            <input ngModel type="text" class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="_edit" placeholder="Enter Serial Number" name="system_serial_number_edit" #system_serial_number_edit="ngModel" readonly>
+                            <input ngModel type="text" class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="system_serial_number_edit" placeholder="Enter Serial Number" name="system_serial_number_edit" #system_serial_number_edit="ngModel" [(ngModel)]="SearilaNUm_selected"
+                                readonly>
                             <!-- <div class="alert alert-danger" *ngIf="system_serial_number_edit.touched && !system_serial_number_edit.valid">
         Please enter Serial Number.
       </div> -->
@@ -215,9 +217,8 @@
 
                         <div class="form-group row">
                             <label for="asset_type_edit" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Asset Type:</label>
-                            <select class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6">
-                <option [(value)]="type.Tname" *ngFor="let type of assetType" name="asset_type_edit"
-                  id="asset_type_edit">
+                            <select ngModel class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" [(ngModel)]="type_sel" name="asset_type_edit" id="asset_type_edit">
+                <option [(value)]="type.Tname" *ngFor="let type of assetType">
                   {{type.Tname}}
                 </option>
               </select>
@@ -226,7 +227,7 @@
 
                         <div class="form-group row">
                             <label for="OEM_edit" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">OEM:</label>
-                            <input ngModel type="text" class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="OEM_edit" placeholder="" name="OEM_edit" #OEM_edit="ngModel" required>
+                            <input ngModel type="text" class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="OEM_edit" placeholder="" name="OEM_edit" #OEM_edit="ngModel" [(ngModel)]="OEM" required>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
                         <div class="row">
@@ -238,7 +239,7 @@
 
                         <div class="form-group row">
                             <label for="model_edit" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Model:</label>
-                            <input ngModel type="text" class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="model_edit" placeholder="" name="model_edit" #model_edit="ngModel" required>
+                            <input ngModel type="text" class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="model_edit" placeholder="" name="model_edit" #model_edit="ngModel" [(ngModel)]="model" required>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
                         <div class="row">
@@ -250,7 +251,7 @@
 
                         <div class="form-group row">
                             <label for="procure_date_edit" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Procure Date:</label>
-                            <ejs-datetimepicker id='procure_date_edit' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="procure_date_edit" placeholder='Select a date'>
+                            <ejs-datetimepicker ngModel id='procure_date_edit' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="procure_date_edit" placeholder='Select a date' [(ngModel)]="procure_date" required>
                             </ejs-datetimepicker>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
@@ -258,35 +259,35 @@
                         <div class="form-group row">
                             <label for="warranty_startDate_edit" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Warranty Start
                 Date:</label>
-                            <ejs-datetimepicker class="col-xs-6 col-sm-6  col-md-6 col-lg-6" id='warranty_startDate_edit' name="warranty_startDate_edit" placeholder='Select a date'>
+                            <ejs-datetimepicker ngModel class="col-xs-6 col-sm-6  col-md-6 col-lg-6" id='warranty_startDate_edit' name="warranty_startDate_edit" placeholder='Select a date' [(ngModel)]="warranty_start_date" required>
                             </ejs-datetimepicker>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
 
                         <div class="form-group row">
                             <label for="warrenty_endDate_edit" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Warrenty End Date:</label>
-                            <ejs-datetimepicker id='warrenty_endDate_edit' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="warrenty_endDate_edit" placeholder='Select a date'>
+                            <ejs-datetimepicker ngModel id='warrenty_endDate_edit' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="warrenty_endDate_edit" placeholder='Select a date' [(ngModel)]="warranty_end_date" required>
                             </ejs-datetimepicker>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
 
                         <div class="form-group row">
                             <label for="AMC_startDate_edit" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">AMC Start Date:</label>
-                            <ejs-datetimepicker id='AMC_startDate_edit' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="AMC_startDate_edit" placeholder='Select a date'>
+                            <ejs-datetimepicker ngModel id='AMC_startDate_edit' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="AMC_startDate_edit" placeholder='Select a date' [(ngModel)]="amc_startdate" required>
                             </ejs-datetimepicker>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
 
                         <div class="form-group row">
                             <label for="AMC_endDate_edit" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">AMC End Date:</label>
-                            <ejs-datetimepicker id='AMC_endDate_edit' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="AMC_endDate_edit" placeholder='Select a date'>
+                            <ejs-datetimepicker ngModel id='AMC_endDate_edit' class="col-xs-6 col-sm-6  col-md-6 col-lg-6" name="AMC_endDate_edit" placeholder='Select a date' [(ngModel)]="amc_endate" required>
                             </ejs-datetimepicker>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
 
                         <div class="form-group row">
                             <label for="os_image_edit" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">OS Image:</label>
-                            <input ngModel type="text" class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="os_image_edit" placeholder="" name="os_image_edit" #os_image_edit="ngModel" required>
+                            <input ngModel type="text" class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="os_image_edit" placeholder="" name="os_image_edit" #os_image_edit="ngModel" [(ngModel)]="os_image" required>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
                         <div class="row">
@@ -298,8 +299,9 @@
 
                         <div class="form-group row">
                             <label for="is_AMAT_compliant_edit" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">AMAT_compliant:</label>
-                            <select class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="is_AMAT_compliant_edit" name="is_AMAT_compliant_edit">
-                <option [(value)]="AMATCompliantValues.desc" *ngFor="let AMATCompliantValues of AMATCompliant">
+                            <select ngModel class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="is_AMAT_compliant_edit" name="is_AMAT_compliant_edit" [(ngModel)]="is_customer_compliant">
+                <option [(value)]="AMATCompliantValues.id" *ngFor="let AMATCompliantValues of AMATCompliant"
+                  >
                   {{AMATCompliantValues.desc}}</option>
               </select>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
@@ -307,13 +309,14 @@
 
                         <div class="form-group row">
                             <label for="GIS_GDC_edit" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">GIS/GDC:</label>
-                            <select class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="GIS_GDC_edit" name="GIS_GDC_edit">
-                <option [(value)]="valuesbyname.name" *ngFor="let valuesbyname of GIS_GDC_values">{{valuesbyname.name}}
+                            <select ngModel class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="GIS_GDC_edit" name="GIS_GDC_edit" [(ngModel)]="customer_dept">
+                <option [(value)]="valuesbyname.name" *ngFor="let valuesbyname of GIS_GDC_values"
+                  >{{valuesbyname.name}}
                 </option>
               </select>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
-
+                        <input type="hidden" name="id" [(ngModel)]="selectedRowIndex" ngModel>
 
                     </div>
                     <div class="modal-footer">
@@ -322,7 +325,7 @@
                     </div>
                 </form>
 
-                <form form (ngSubmit)="AssignAsset(assignAssetForm); assignAssetForm.reset()" #assignAssetForm="ngForm" class="col-xs-12 col-sm-12  col-md-12 col-lg-12" id="assignAssetForm-form-id" *ngIf="assignAssetForm_tag !== null">
+                <form form (ngSubmit)="AssignAsset(assignAssetForm);" #assignAssetForm="ngForm" class="col-xs-12 col-sm-12  col-md-12 col-lg-12" id="assignAssetForm-form-id" *ngIf="assignAssetForm_tag !== null">
                     <div class="modal-header">
                         <h3 class="modal-title pull-left mod-head">Assign/Reassign Asset : </h3>
                         <button type="button" class="close pull-right" aria-label="Close" (click)="reload_home()">
@@ -333,18 +336,31 @@
                     <div class="modal-body question-modal-body">
 
                         <div class="form-group row">
-                            <label for="system_serial_number_assign" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Serial Number:</label>
-                            <input ngModel type="text" class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="_edit" placeholder="Enter Serial Number" name="system_serial_number_assign" #system_serial_number_assign="ngModel" readonly>
+                            <label for="system_serial_number_assign" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Serial
+                Number:</label>
+                            <!-- <input ngModel type="text" class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="system_serial_number_assign" value="123" placeholder="Enter Serial Number" name="system_serial_number_assign" #system_serial_number_assign="ngModel" readonly> -->
+                            <span class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6">{{SearilaNUm_selected}}</span>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                             <!-- <div class="alert alert-danger" *ngIf="system_serial_number_edit.touched && !system_serial_number_edit.valid">
         Please enter Serial Number.
       </div> -->
                         </div>
 
+                        <div class="form-group row" *ngIf="current_assiged_emp !== null">
+                            <label for="system_serial_number_assignTo" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Currently Assigned
+                To :</label>
+                            <span class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6">{{current_assiged_emp}}</span>
+                            <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
+
+                        </div>
+
+                        <input type="hidden" name="asset_id" [(ngModel)]="selectedRowIndex" ngModel>
+
                         <div class="form-group row">
-                            <label for="employee_id" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Please select employee:</label>
-                            <select class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="employee_id" name="employee_id">
-                <option [(value)]="empValues.id" *ngFor="let empValues of employeeList">{{empValues.name}}</option>
+                            <label for="employee_id" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">Assign/Reassign To:</label>
+                            <select class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="employee_id" name="employee_id" ngModel>
+                <option [(ngValue)]="empValues.id" *ngFor="let empValues of employeeList">{{empValues.firstname}}
+                  {{empValues.lastname}}</option>
               </select>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
                         </div>
@@ -356,36 +372,84 @@
                     </div>
                 </form>
 
+
+
                 <div *ngIf="grid_tag !== null" class="mat-elevation-z8">
                     <mat-form-field>
                         <mat-label>Search</mat-label>
                         <input matInput (keyup)="applyFilter($event)" placeholder="Ex. name">
                     </mat-form-field>
                     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+                        <ng-container matColumnDef="serial_number">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Serial Number </th>
+                            <td mat-cell *matCellDef="let element"> {{element.serial_number}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="type">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Type </th>
+                            <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="OEM">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> OEM </th>
+                            <td mat-cell *matCellDef="let element" (click)="eleClicked(element)"> {{element.OEM}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="model">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> model </th>
+                            <td mat-cell *matCellDef="let element"> {{element.model}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="procure_date">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Procure Date </th>
+                            <td mat-cell *matCellDef="let element"> {{element.procure_date | date:'MM/dd/yyyy h:mm a'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="warranty_start_date">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.display]="'none'"> warranty_start_date </th>
+                            <td mat-cell *matCellDef="let element" [style.display]="'none'"> {{element.warranty_start_date}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="warranty_end_date">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Warranty End Date </th>
+                            <td mat-cell *matCellDef="let element"> {{element.warranty_end_date | date:'MM/dd/yyyy h:mm a'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="amc_startdate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.display]="'none'"> amc_startdate </th>
+                            <td mat-cell *matCellDef="let element" [style.display]="'none'"> {{element.amc_startdate}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="amc_endate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.display]="'none'"> amc_endate </th>
+                            <td mat-cell *matCellDef="let element" [style.display]="'none'"> {{element.amc_endate}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="os_image">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> os Image </th>
+                            <td mat-cell *matCellDef="let element"> {{element.os_image}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="is_customer_compliant">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.display]="'none'"> is_customer_compliant
+                            </th>
+                            <td mat-cell *matCellDef="let element" [style.display]="'none'"> {{element.is_customer_compliant}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="customer_dept">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Customer Dept. </th>
+                            <td mat-cell *matCellDef="let element"> {{element.customer_dept}} </td>
+                        </ng-container>
+
                         <ng-container matColumnDef="id">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Id. </th>
-                            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header [style.display]="'none'"> id </th>
+                            <td mat-cell *matCellDef="let element" [style.display]="'none'"> {{element.id}} </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="employee_name">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> employee_name </th>
-                            <td mat-cell *matCellDef="let element"> {{element.employee_name}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="employee_salary">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> employee_salary </th>
-                            <td mat-cell *matCellDef="let element" (click)="eleClicked(element)"> {{element.employee_salary}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="employee_age">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> employee_age </th>
-                            <td mat-cell *matCellDef="let element"> {{element.employee_age}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="profile_image">
+                        <!-- <ng-container matColumnDef="profile_image">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header [style.display]="'none'"> profile_image </th>
                             <td mat-cell *matCellDef="let element" [style.display]="'none'"> {{element.profile_image}} </td>
-                        </ng-container>
+                        </ng-container> -->
 
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -707,13 +771,15 @@
 
 
 <ng-template #template_remove>
-    <form form (ngSubmit)="RemoveAsset(removeAssetForm); removeAssetForm.reset()" #removeAssetForm="ngForm" class="col-xs-12 col-sm-12  col-md-12 col-lg-12" id="removeAsset-form-id">
+    <form form (ngSubmit)="RemoveAsset(removeAssetForm);" #removeAssetForm="ngForm" class="col-xs-12 col-sm-12  col-md-12 col-lg-12" id="removeAsset-form-id">
         <div class="modal-header">
             <h4 class="modal-title pull-left mod-head">Remove Asset Details</h4>
             <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
         <span aria-hidden="true">&times;</span>
       </button>
         </div>
+
+        <!-- <input type="hidden" name="id" [(ngModel)]="selectedRowIndex" ngModel> -->
 
         <div class="modal-body question-modal-body">
 
