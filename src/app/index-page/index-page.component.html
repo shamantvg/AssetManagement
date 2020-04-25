@@ -20,7 +20,10 @@
             </li>
             <!-- <li *ngIf='ReportLink !== null'> -->
             <li>
-                <a (click)="exportAsXLSX()" href="javascript:;">Export Assets</a>
+                <a (click)="exportEmpAsset()" href="javascript:;">Employee Asset</a>
+            </li>
+            <li>
+                <a href="javascript:;" (click)="openAddEmployee(template_addEmployee)">Import Employee</a>
             </li>
         </ul>
     </nav>
@@ -300,8 +303,7 @@
                         <div class="form-group row">
                             <label for="is_AMAT_compliant_edit" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">AMAT_compliant:</label>
                             <select ngModel class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="is_AMAT_compliant_edit" name="is_AMAT_compliant_edit" [(ngModel)]="is_customer_compliant">
-                <option [(value)]="AMATCompliantValues.id" *ngFor="let AMATCompliantValues of AMATCompliant"
-                  >
+                <option [(value)]="AMATCompliantValues.id" *ngFor="let AMATCompliantValues of AMATCompliant">
                   {{AMATCompliantValues.desc}}</option>
               </select>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
@@ -310,8 +312,7 @@
                         <div class="form-group row">
                             <label for="GIS_GDC_edit" class="col-xs-2 col-sm-2  col-md-2 col-lg-2">GIS/GDC:</label>
                             <select ngModel class="form-control col-xs-6 col-sm-6  col-md-6 col-lg-6" id="GIS_GDC_edit" name="GIS_GDC_edit" [(ngModel)]="customer_dept">
-                <option [(value)]="valuesbyname.name" *ngFor="let valuesbyname of GIS_GDC_values"
-                  >{{valuesbyname.name}}
+                <option [(value)]="valuesbyname.name" *ngFor="let valuesbyname of GIS_GDC_values">{{valuesbyname.name}}
                 </option>
               </select>
                             <div class="col-xs-4 col-sm-4  col-md-4 col-lg-4"></div>
@@ -377,8 +378,12 @@
                 <div *ngIf="grid_tag !== null" class="mat-elevation-z8">
                     <mat-form-field>
                         <mat-label>Search</mat-label>
-                        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. name">
+                        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Serial Number">
+
                     </mat-form-field>
+                    <span (click)="exportAsXLSX()" class="material-icons md-36 icon-css-my" title="Export to excel" style="float: right;">
+            cloud_download
+          </span>
                     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
                         <ng-container matColumnDef="serial_number">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header> Serial Number </th>
@@ -396,7 +401,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="model">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> model </th>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Model </th>
                             <td mat-cell *matCellDef="let element"> {{element.model}} </td>
                         </ng-container>
 
@@ -426,7 +431,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="os_image">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> os Image </th>
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> OS Image </th>
                             <td mat-cell *matCellDef="let element"> {{element.os_image}} </td>
                         </ng-container>
 
@@ -792,6 +797,35 @@
             <input class="btn btn-primary" type="submit" value="Yes">
             <button type="button" class="btn btn-primary" (click)="modalRef.hide()">No</button>
             <p class="alert alert-danger top-space" *ngIf="error !== null">{{error}}</p>
+        </div>
+    </form>
+</ng-template>
+
+<ng-template #template_addEmployee>
+    <form form (ngSubmit)="addEmpFormFunc(addEmpForm);" #addEmpForm="ngForm" class="col-xs-12 col-sm-12  col-md-12 col-lg-12">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left mod-head">Import Employee</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+        </div>
+
+        <!-- <input type="hidden" name="id" [(ngModel)]="selectedRowIndex" ngModel> -->
+
+        <div class="modal-body question-modal-body">
+            <span id="SampleFile" name="SampleFile" title="Sample File" (click)="exportSampleFile()">Click here to sample
+        file</span>
+            <br>
+            <p>Choose employee file:</p>
+            <div class="custom-file mb-3">
+                <input ngModel type="file" class="custom-file-input file-upload-cls " id="customFile" name="filename" (change)="onFileChange($event)" #filename="ngModel" [(ngModel)]="model" required>
+                <label class="custom-file-label file-upload-cls" for="customFile">Choose file</label>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <p class="alert alert-danger top-space err-msg-cls" *ngIf="import_error !== null">{{import_errorMsg}}</p>
+            <input class="btn btn-primary" type="submit" value="submit" [disabled]="!addEmpForm.form.valid">
         </div>
     </form>
 </ng-template>

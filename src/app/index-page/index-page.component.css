@@ -66,3 +66,27 @@
 .mat-sort-header {
     font-weight: bold;
 }
+
+.icon-css-my {
+    float: right;
+    cursor: pointer;
+    padding-top: 20px;
+    padding-right: 20px;
+}
+
+#SampleFile {
+    float: right;
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: small;
+}
+
+.file-upload-cls {
+    cursor: pointer;
+}
+
+.err-msg-cls {
+    margin-left: 20px;
+    padding: 1px;
+    margin-top: 10px;
+}

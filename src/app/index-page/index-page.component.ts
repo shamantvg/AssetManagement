@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import * as $ from "jquery";
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { FieldsService } from '../fields.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { ExcelService } from '../excel.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AngularMaterialModule } from '../angular-material.module';
 import swal from 'sweetalert';
+import * as XLSX from 'xlsx';
 
 
 
@@ -49,6 +50,7 @@ export class IndexPageComponent implements OnInit {
   assignAssetForm_tag = null;
   selectedRowIndex: number = -1;
   exportData = [];
+  exportEmpAssetData = [];
   employeeList = [];
   SearilaNUm_selected = "";
   current_assiged_emp = null;
@@ -56,13 +58,16 @@ export class IndexPageComponent implements OnInit {
   type_sel = "";
   OEM = "";
   model = "";
-  procure_date ="";
+  procure_date = "";
   warranty_start_date = "";
   warranty_end_date = "";
   amc_startdate = "";
   amc_endate = "";
   os_image = "";
   is_customer_compliant = "";
+  dataString = null;
+  import_error = null;
+  import_errorMsg = "";
 
   title = '';
 
@@ -75,6 +80,18 @@ export class IndexPageComponent implements OnInit {
       return false;
     }
 
+    this.grid_tag = true;
+    this.editAssetForm_tag = null;
+    this.assignAssetForm_tag = null;
+    this.addAssetForm_tag = null;
+    this.modalRef = this.modalService.show(template);
+
+  }
+
+  openAddEmployee(template: TemplateRef<any>) {
+
+    this.import_error = null;
+    this.import_errorMsg = "";
     this.grid_tag = true;
     this.editAssetForm_tag = null;
     this.assignAssetForm_tag = null;
@@ -120,7 +137,9 @@ export class IndexPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isLoggedIn();
+    //this.isLoggedIn();
+    this.GetGrid();
+    this.GetEmployeeList();
   }
 
   ngAfterViewInit() {
@@ -155,17 +174,60 @@ export class IndexPageComponent implements OnInit {
     //console.log("element val--->"+JSON.stringify(eleval));
   }
 
-  isLoggedIn(): boolean {
-    const userDetails = JSON.parse(localStorage.getItem('admiinDetails'));
-    if (userDetails) {
-      this.GetGrid();
-      this.GetEmployeeList();
-      return true;
-    } else {
-      this.router.navigateByUrl('/login');
-      //return false;
+  onFileChange(ev) {
+
+    this.import_error = null;
+    this.import_errorMsg = "";
+    let workBook = null;
+    let jsonData = null;
+    const reader = new FileReader();
+
+
+    const file = ev.target.files[0];
+    let fileObj = ev.target.files[0];
+    let fileName = fileObj.name;
+    //check file is valid
+    if (!this.validateFile(fileName)) {
+      this.import_error = true;
+      //console.log('Selected file format is not supported');
+      this.import_errorMsg = "Please select .xlsx file format."
+      return false;
     }
+
+    this.import_error = null;
+    this.import_errorMsg = "";
+
+
+    $(".custom-file-label").addClass("selected").html(fileName);
+    reader.onload = (event) => {
+      const data = reader.result;
+      workBook = XLSX.read(data, { type: 'binary' });
+      jsonData = workBook.SheetNames.reduce((initial, name) => {
+        const sheet = workBook.Sheets[name];
+        initial[name] = XLSX.utils.sheet_to_json(sheet);
+        return initial;
+      }, {});
+      //this.dataString = JSON.stringify(jsonData);
+      this.dataString = jsonData;
+      console.log("xlfile--->" + JSON.stringify(this.dataString));
+      //document.getElementById('output').innerHTML = dataString.slice(0, 300).concat("...");
+      //this.setDownload(dataString);
+    }
+    reader.readAsBinaryString(file);
   }
+
+  // isLoggedIn(): boolean {
+  //  // const userDetails = JSON.parse(localStorage.getItem('token'));
+  //  const userDetails = localStorage.getItem('token');
+  //   if (userDetails) {
+  //     this.GetGrid();
+  //     this.GetEmployeeList();
+  //     return true;
+  //   } else {
+  //     this.router.navigateByUrl('/login');
+  //     //return false;
+  //   }
+  // }
 
   GetGrid(): any {
 
@@ -173,7 +235,6 @@ export class IndexPageComponent implements OnInit {
     this.FieldsList.getAllAsset().subscribe((result) => {
       //console.log("result--->" + JSON.stringify(result));
       this.dataSource = new MatTableDataSource(result);
-      this.exportData = result;
       this.grid_tag = true;
       // this.dataSource.paginator = this.paginator;
       // this.dataSource.sort = this.sort;
@@ -196,6 +257,15 @@ export class IndexPageComponent implements OnInit {
     //console.log("GetEmployeeList");
     this.FieldsList.GetEmployeeList().subscribe((result) => {
       this.employeeList = result;
+    }, err => {
+      if(err instanceof HttpErrorResponse){
+        if(err.status === 401){
+          this.router.navigateByUrl('/login');
+        }
+        if(err.status === 500){
+          this.router.navigateByUrl('/login');
+        }
+      }
     });
   }
 
@@ -211,6 +281,15 @@ export class IndexPageComponent implements OnInit {
     });
   }
 
+  validateFile(name: String) {
+    var ext = name.substring(name.lastIndexOf('.') + 1);
+    if (ext.toLowerCase() == 'xlsx') {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
 
 
 
@@ -258,6 +337,26 @@ export class IndexPageComponent implements OnInit {
     });
   }
 
+  addEmpFormFunc(adEmpform: NgForm) {
+
+    this.FieldsList.AddEmployee(this.dataString).subscribe((result) => {
+      //console.log("assign success");
+      this.GetGrid();
+      this.reload_home();
+      this.modalRef.hide();
+      swal("Success", "Employee details successfully imported!!!", "success");
+    }, err => {
+      //console.log(err);
+      this.GetGrid();
+      this.reload_home();
+      this.modalRef.hide();
+      swal("Error", err.error.message, "error");
+
+    });
+  }
+
+
+
   AssignAsset(Assignform: NgForm) {
     //console.log(Assignform.value);
     this.FieldsList.AssignReassignFunct(Assignform.value).subscribe((result) => {
@@ -273,7 +372,7 @@ export class IndexPageComponent implements OnInit {
 
 
   logout() {
-    localStorage.removeItem('admiinDetails');
+    localStorage.removeItem('token');
     this.router.navigateByUrl('/login');
   }
   reload_home() {
@@ -298,8 +397,36 @@ export class IndexPageComponent implements OnInit {
 
   exportAsXLSX(): void {
 
-    this.excelService.exportAsExcelFile(this.exportData, 'Asset-Details');
-    this.reload_home();
+    this.FieldsList.exportAssetList().subscribe((result) => {
+      //console.log("assign success");
+      this.exportData = result;
+      this.excelService.exportAsExcelFile(this.exportData, 'Asset-Details');
+      this.GetGrid();
+      this.reload_home();
+      swal("Success", "Asset details exported !!!", "success");
+    }, err => {
+      swal("Error", "Error while exporting asset details!!!", "error");
+      //console.log(err);
+    });
+  }
+
+  exportEmpAsset(): void {
+
+    this.FieldsList.exportEmpAssetList().subscribe((result) => {
+      //console.log("assign success");
+      this.exportEmpAssetData = result;
+      this.excelService.exportAsExcelFile(this.exportEmpAssetData, 'EmployeeAsset-Details');
+      this.GetGrid();
+      this.reload_home();
+      swal("Success", "Employee-Asset details exported !!!", "success");
+    }, err => {
+      swal("Error", "Error while exporting asset details!!!", "error");
+      //console.log(err);
+    });
+  }
+
+  exportSampleFile(): void {
+    this.excelService.exportAsExcelFile(this.SampleJson, 'EmployeeDetails');
   }
 
   assetType = [{
@@ -318,11 +445,11 @@ export class IndexPageComponent implements OnInit {
 
   AMATCompliant = [{
     desc: 'Yes',
-    id:'Y'
+    id: 'Y'
   },
   {
     desc: 'No',
-    id:'N'
+    id: 'N'
   }
   ];
 
@@ -332,6 +459,29 @@ export class IndexPageComponent implements OnInit {
   {
     name: 'GDC',
   }
+  ];
+
+  SampleJson = [
+    {
+      "firstname": "abc",
+      "lastname": "last abc",
+      "emailId": "abc@gmail.com",
+      "contactNumber": 7411110023,
+      "AdminId": "SG001122",
+      "password": "abc@123",
+      "LoginAccess": 1,
+      "AdminAccess": 1
+    },
+    {
+      "firstname": "xyz",
+      "lastname": "last xyz",
+      "emailId": "xyz@gmail.com",
+      "contactNumber": 99002332232,
+      "AdminId": "SG001123",
+      "password": "xyz@123",
+      "LoginAccess": 1,
+      "AdminAccess": 0
+    }
   ];
 
 

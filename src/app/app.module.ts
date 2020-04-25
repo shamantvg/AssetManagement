@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import * as $ from "jquery";
 import { NgModule,CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule,HTTP_INTERCEPTORS} from '@angular/common/http';
 import { DateTimePickerModule } from '@syncfusion/ej2-angular-calendars';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -19,6 +19,9 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { AgGridModule } from 'ag-grid-angular';
 
 import { AngularMaterialModule } from './angular-material.module';
+import { AuthGuard } from './auth.guard';
+import {TokenInterceptorService} from './token-interceptor.service'
+import { EventService } from 'ag-grid-community';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,12 @@ import { AngularMaterialModule } from './angular-material.module';
     ModalModule.forRoot(),
     AgGridModule.withComponents([])
   ],
-  providers: [],
+  providers: [AuthGuard,AuthGuard,EventService,
+  {
+    provide : HTTP_INTERCEPTORS,
+    useClass : TokenInterceptorService,
+    multi : true
+  }],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
