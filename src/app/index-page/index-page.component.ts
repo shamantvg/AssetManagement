@@ -168,7 +168,7 @@ export class IndexPageComponent implements OnInit {
     this.amc_endate = rowval.amc_endate;
     this.os_image = rowval.os_image;
     this.is_customer_compliant = rowval.is_customer_compliant;
-    console.log("rorval--->" + JSON.stringify(rowval));
+    //console.log("rorval--->" + JSON.stringify(rowval));
   }
   eleClicked(eleval) {
     //console.log("element val--->"+JSON.stringify(eleval));

@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
       //console.log(Assignform.value);
       this.FieldsList.EmployeeAuth(form.value).subscribe((result) => {
 
-        console.log(result);
+        //console.log(result);
 
         if (result.loginAccess === "1" || result.loginAccess === 1) {
           localStorage.setItem('token', result.token);
@@ -66,20 +66,24 @@ export class LoginComponent implements OnInit {
   }
 
 
-  ngOnInit(): void {
-    //this.isLoggedIn();
+  ngOnInit(): any {
+    this.isLoggedIn();
   }
 
-  // isLoggedIn(): boolean {
-  //   //const userDetails = JSON.parse(localStorage.getItem('token'));
-  //   const userDetails = localStorage.getItem('token');
-  //   if (userDetails) {
-  //     this.router.navigateByUrl('/home-page');
-  //     return true;
-  //   } else {
-  //     //this.router.navigateByUrl('/login');
-  //     //return false;
-  //   }
-  // }
+  isLoggedIn(): boolean {
+    const userDetails = localStorage.getItem('token');
+    if (userDetails) {
+      this.FieldsList.CheckSessionToken().subscribe((result) => {
+        this.router.navigateByUrl('/home-page');
+        return true;
+      }, err => {
+        this.router.navigateByUrl('/login');
+        return false;
+      });
+    } else {
+      this.router.navigateByUrl('/login');
+      return false;
+    }
+  }
 
 }

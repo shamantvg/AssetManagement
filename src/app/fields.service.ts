@@ -94,4 +94,8 @@ export class FieldsService {
     return localStorage.getItem('token');
   }
 
+  //assign asset to employee
+  CheckSessionToken(): Observable<any> {
+    return this.http.get<any>('http://localhost:8080/CheckSessionToken');
+  }
 }
