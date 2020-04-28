@@ -13,6 +13,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { AngularMaterialModule } from '../angular-material.module';
 import swal from 'sweetalert';
 import * as XLSX from 'xlsx';
+import { BnNgIdleService } from 'bn-ng-idle';
 
 
 
@@ -25,7 +26,7 @@ export class IndexPageComponent implements OnInit {
 
 
   constructor(private FieldsList: FieldsService, private router: Router, private excelService: ExcelService
-    , private http: HttpClient, private modalService: BsModalService) {
+    , private http: HttpClient, private modalService: BsModalService, private bnIdle: BnNgIdleService) {
 
 
 
@@ -138,6 +139,7 @@ export class IndexPageComponent implements OnInit {
 
   ngOnInit(): void {
     //this.isLoggedIn();
+    this.setSessionTimeout();
     this.GetGrid();
     this.GetEmployeeList();
   }
@@ -252,17 +254,37 @@ export class IndexPageComponent implements OnInit {
 
   }
 
+  setSessionTimeout(): any {
+    this.bnIdle.startWatching(5).subscribe((isTimedOut: boolean) => {
+      if (isTimedOut) {
+        console.log('session expired');
+        this.removeLocalStorage();
+      }
+    });
+  }
+
+  removeLocalStorage(): any {
+    localStorage.removeItem('token');
+    console.log('token removed');
+    this.bnIdle.stopTimer();
+    swal("You have been inactive for 15minutes(s).You will be logged off automatically")
+      .then((value) => {
+        //swal(`The returned value is: ${value}`);
+        this.router.navigateByUrl('/login');
+      });
+  }
+
   GetEmployeeList(): any {
 
     //console.log("GetEmployeeList");
     this.FieldsList.GetEmployeeList().subscribe((result) => {
       this.employeeList = result;
     }, err => {
-      if(err instanceof HttpErrorResponse){
-        if(err.status === 401){
+      if (err instanceof HttpErrorResponse) {
+        if (err.status === 401) {
           this.router.navigateByUrl('/login');
         }
-        if(err.status === 500){
+        if (err.status === 500) {
           this.router.navigateByUrl('/login');
         }
       }

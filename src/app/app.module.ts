@@ -22,6 +22,7 @@ import { AngularMaterialModule } from './angular-material.module';
 import { AuthGuard } from './auth.guard';
 import {TokenInterceptorService} from './token-interceptor.service'
 import { EventService } from 'ag-grid-community';
+import { BnNgIdleService } from 'bn-ng-idle';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,7 @@ import { EventService } from 'ag-grid-community';
     ModalModule.forRoot(),
     AgGridModule.withComponents([])
   ],
-  providers: [AuthGuard,AuthGuard,EventService,
+  providers: [BnNgIdleService,AuthGuard,AuthGuard,EventService,
   {
     provide : HTTP_INTERCEPTORS,
     useClass : TokenInterceptorService,
