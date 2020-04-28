@@ -255,9 +255,9 @@ export class IndexPageComponent implements OnInit {
   }
 
   setSessionTimeout(): any {
-    this.bnIdle.startWatching(5).subscribe((isTimedOut: boolean) => {
+    this.bnIdle.startWatching(900).subscribe((isTimedOut: boolean) => {
       if (isTimedOut) {
-        console.log('session expired');
+        //console.log('session expired');
         this.removeLocalStorage();
       }
     });
@@ -265,7 +265,7 @@ export class IndexPageComponent implements OnInit {
 
   removeLocalStorage(): any {
     localStorage.removeItem('token');
-    console.log('token removed');
+    //console.log('token removed');
     this.bnIdle.stopTimer();
     swal("You have been inactive for 15minutes(s).You will be logged off automatically")
       .then((value) => {
