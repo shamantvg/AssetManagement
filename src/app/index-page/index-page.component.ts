@@ -211,7 +211,7 @@ export class IndexPageComponent implements OnInit {
       }, {});
       //this.dataString = JSON.stringify(jsonData);
       this.dataString = jsonData;
-      console.log("xlfile--->" + JSON.stringify(this.dataString));
+      //console.log("xlfile--->" + JSON.stringify(this.dataString));
       //document.getElementById('output').innerHTML = dataString.slice(0, 300).concat("...");
       //this.setDownload(dataString);
     }
@@ -395,6 +395,7 @@ export class IndexPageComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('token');
+    this.bnIdle.stopTimer();
     this.router.navigateByUrl('/login');
   }
   reload_home() {

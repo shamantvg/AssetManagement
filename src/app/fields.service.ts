@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JsonPipe } from '@angular/common';
 
@@ -10,7 +10,7 @@ export class FieldsService {
 
   constructor(private http: HttpClient) { }
 
- // private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
+  // private options = { headers: new HttpHeaders().set('Content-Type', 'application/json') };
   //regerateRoport(queryElement): Observable<any> {
   //return this.http.post('http://localhost:8080/lms/registerstudent', queryElement);
 
@@ -32,29 +32,29 @@ export class FieldsService {
 
   //assign asset to employee
   AssignReassignFunct(empDetails): Observable<any> {
-    return this.http.post<any>('http://localhost:8080/employeeasset',empDetails);
+    return this.http.post<any>('http://localhost:8080/employeeasset', empDetails);
   }
 
-   //remove asset
-   RemoveAssetFunc(id): Observable<any> {
+  //remove asset
+  RemoveAssetFunc(id): Observable<any> {
     return this.http.delete<any>(`http://localhost:8080/assets/${id}`);
   }
 
   //assign asset to employee
   addAssetFunc(AssetDetails): Observable<any> {
-    return this.http.post<any>('http://localhost:8080/assets',AssetDetails);
+    return this.http.post<any>('http://localhost:8080/assets', AssetDetails);
   }
 
   //modify asset to employee
   editAssetFunc(AssetDetails): Observable<any> {
-    return this.http.put<any>('http://localhost:8080/assets',AssetDetails);
+    return this.http.put<any>('http://localhost:8080/assets', AssetDetails);
   }
 
-  
 
-  regerateRoport (queryElement): any {
+
+  regerateRoport(queryElement): any {
     queryElement;
-    return '{"Status":200,"Message":"Report has been mailed.","Query Element":"'+queryElement+'"}';
+    return '{"Status":200,"Message":"Report has been mailed.","Query Element":"' + queryElement + '"}';
   }
 
   getFields(): any {
@@ -66,8 +66,8 @@ export class FieldsService {
     return this.http.get<any>('http://dummy.restapiexample.com/api/v1/employees');
   }
 
-   //export asset details api call
-   exportAssetList(): Observable<any> {
+  //export asset details api call
+  exportAssetList(): Observable<any> {
     return this.http.get<any>('http://localhost:8080/assetsexport');
   }
 
@@ -78,24 +78,37 @@ export class FieldsService {
 
   //assign asset to employee
   EmployeeAuth(empDetails): Observable<any> {
-    return this.http.post<any>('http://localhost:8080/employeeAuth',empDetails);
+    return this.http.post<any>('http://localhost:8080/employeeAuth', empDetails);
   }
 
-   //assign asset to employee
-   AddEmployee(empDetails): Observable<any> {
-    return this.http.post<any>('http://localhost:8080/employee',empDetails);
+  //assign asset to employee
+  AddEmployee(empDetails): Observable<any> {
+    return this.http.post<any>('http://localhost:8080/employee', empDetails);
   }
 
-  loggedIn(){
+  loggedIn() {
     return !!localStorage.getItem('token');
   }
 
-  getToken(){
+  getToken() {
     return localStorage.getItem('token');
   }
 
   //check session token
   CheckSessionToken(): Observable<any> {
     return this.http.get<any>('http://localhost:8080/CheckSessionToken');
+  }
+
+  //assign asset to employee
+  EmployeeForgotPassword(empDetails): Observable<any> {
+    return this.http.post<any>('http://localhost:8080/forgotPassword', empDetails);
+  }
+  //get Reset User Details
+  getResetUser(adminToken): Observable<any> {
+    return this.http.get<any>(`http://localhost:8080/getResetUser/${adminToken}`);
+  }
+
+  EmployeeResetPassword(empDetails): Observable<any> {
+    return this.http.post<any>('http://localhost:8080/resetPassword', empDetails);
   }
 }
